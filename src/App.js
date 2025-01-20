@@ -151,7 +151,7 @@ const App = () => {
 
   const checkIfApiIsAvailable = () => {
     // check if API is available by fetching a stop
-    fetch("https://v6.db.transport.rest/stops/8011113/departures")
+    fetch("https://v6.bvg.transport.rest/stops/900017101/departures")
       .then((response) => {
         if (response.status === 200) {
           setApiIsAvailable(true);
@@ -492,7 +492,9 @@ const App = () => {
             }}
           />
         </Popover>
-
+        {
+          "Due to excessive downtime, I switched from Deutsche Bahn API to BVG API. Until they fix their issues, only Berlin and Brandenburg is available."
+        }
         {apiIsAvailable
           ? ""
           : "Es scheint aktuell ein Problem mit der Datenschnittstelle zu geben, weshalb die Website nicht wie gewohnt funktioniert. Wir müssen uns leider gedulden."}
