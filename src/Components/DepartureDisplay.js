@@ -123,6 +123,7 @@ const DepartureDisplay = (props) => {
         fontSize={props.fontSize}
         columns={columns}
         dataSource={columnData}
+        remarksVisibility={props.remarksVisibility}
       />
     </div>
   );

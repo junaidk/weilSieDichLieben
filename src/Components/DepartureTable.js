@@ -3,7 +3,7 @@ import React from "react";
 import Marquee from "react-fast-marquee";
 
 const DepartureTable = (props) => {
-  const FONTSIZE = props.fontSize + "px";
+  const FONTSIZE = props.fontSize;
   const FONTFAMILYNAME = "DotMatrix";
 
   const sortedDataSource = props.dataSource.sort((a, b) => {
@@ -111,11 +111,12 @@ const DepartureTable = (props) => {
                 {data.when > 0 ? `${data.when} min` : "Jetzt"}
               </Col>
             </Row>
-            {remarkText !== "" && (
+            {remarkText !== "" && props.remarksVisibility && (
               <Marquee
+                speed={"30"}
                 style={{
-                  color: "orange",
-                  fontSize: FONTSIZE,
+                  color: "gray",
+                  fontSize: FONTSIZE*0.8,
                   fontFamily: FONTFAMILYNAME,
                 }}
               >

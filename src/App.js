@@ -36,8 +36,9 @@ const App = () => {
   );
   const [apiIsAvailable, setApiIsAvailable] = useState(false);
   const [exportUrl, setExportUrl] = useState("");
-  const [fontSize, setFontSize] = useState(16);
+  const [fontSize, setFontSize] = useState(20);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
+  const [remarksVisibility, setRemarksVisibility] = useState(false)
 
   const { Title, Text } = Typography;
 
@@ -492,9 +493,9 @@ const App = () => {
             }}
           />
         </Popover>
-        {
+        {/* {
           "Due to excessive downtime, I switched from Deutsche Bahn API to BVG API. Until they fix their issues, only Berlin and Brandenburg is available."
-        }
+        } */}
         {apiIsAvailable
           ? ""
           : "Es scheint aktuell ein Problem mit der Datenschnittstelle zu geben, weshalb die Website nicht wie gewohnt funktioniert. Wir müssen uns leider gedulden."}
@@ -533,38 +534,76 @@ const App = () => {
       >
         <div>
           <Popover
-            title="Schriftgröße Anzeigetafel"
             trigger="click"
             content={
               <div
                 style={{
-                  display: "flex",
+                  display: "grid",
                   alignItems: "center",
-                  justifyContent: "space-evenly",
+                  justifyContent: "center",
                 }}
               >
                 <div>
-                  <Button
-                    onClick={() => {
-                      setFontSize((prev) => prev + 2);
-                      saveFontSizeInCookie("fontSize", fontSize + 2);
-                      buildUrlOutOfSelectedStations(selectedStations);
-                    }}
-                    icon={<PlusOutlined />}
-                  />
+
+                  <div>Schriftgröße Anzeigetafel</div>
+                  <div>
+                    <div style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "10px",
+                      marginTop: "10px"
+                    }}>
+                      <Button
+                        onClick={() => {
+                          setFontSize((prev) => prev + 2);
+                          saveFontSizeInCookie("fontSize", fontSize + 2);
+                          buildUrlOutOfSelectedStations(selectedStations);
+                        }}
+                        icon={<PlusOutlined />}
+                      />
+
+                      <Button
+                        onClick={() => {
+                          setFontSize((prev) => prev - 2);
+                          saveFontSizeInCookie("fontSize", fontSize - 2);
+                          buildUrlOutOfSelectedStations(selectedStations);
+                        }}
+                        icon={<MinusOutlined />}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <Button
-                    onClick={() => {
-                      setFontSize((prev) => prev - 2);
-                      saveFontSizeInCookie("fontSize", fontSize - 2);
-                      buildUrlOutOfSelectedStations(selectedStations);
-                    }}
-                    icon={<MinusOutlined />}
-                  />
+
+
+
+                <div style={{
+                  marginTop: "10px"
+                }}>
+                  <div>Sichtbarkeit der Bemerkungen</div>
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+
+                  }}
+                  >
+                    <Button
+                      style={{
+                        marginTop: "10px"
+                      }}
+                      onClick={() => {
+                        setRemarksVisibility((prev) => !prev);
+                        saveFontSizeInCookie("remarksVisibility", remarksVisibility);
+                        buildUrlOutOfSelectedStations(selectedStations);
+                      }}
+                    > change </Button>
+
+                  </div>
                 </div>
               </div>
             }
+
           >
             <FontSizeOutlined
               style={{
@@ -646,6 +685,7 @@ const App = () => {
           <DepartureDisplay
             fontSize={fontSize}
             selectedStations={selectedStations}
+            remarksVisibility={remarksVisibility}
           />
         </div>
       )}
@@ -659,7 +699,7 @@ const App = () => {
           removeStation={removeStation}
         />
       )}
-      <DonationDisplay fontSize={fontSize} />
+      {<DonationDisplay fontSize={fontSize} />}
     </div>
   );
 };
