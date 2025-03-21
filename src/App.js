@@ -38,7 +38,7 @@ const App = () => {
   const [exportUrl, setExportUrl] = useState("");
   const [fontSize, setFontSize] = useState(20);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
-  const [remarksVisibility, setRemarksVisibility] = useState(false)
+  const [remarksVisibility, setRemarksVisibility] = useState(true);
 
   const { Title, Text } = Typography;
 
@@ -71,6 +71,7 @@ const App = () => {
       // fetch data from cookie
       fetchStationsFromCookie();
       fetchFontSizeFromCookie();
+      fetchRemarksVisibilityFromCookie();
     }
   };
 
@@ -166,6 +167,22 @@ const App = () => {
       });
   };
 
+  const fetchRemarksVisibilityFromCookie = () => {
+    const cookieRemarksVisibility = document.cookie.replace(
+      /(?:(?:^|.*;\s*)remarksVisibility\s*=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+
+    if (cookieRemarksVisibility != null) {
+      setRemarksVisibility(JSON.parse(cookieRemarksVisibility));
+    }
+  };
+
+  const onRemarksVisibilityChange = (value) => {
+    setRemarksVisibility(value);
+    saveDataInCookie("remarksVisibility", value);
+  };
+
   const fetchFontSizeFromCookie = () => {
     const cookieFontSize = document.cookie.replace(
       /(?:(?:^|.*;\s*)fontSize\s*=\s*([^;]*).*$)|^.*$/,
@@ -180,11 +197,11 @@ const App = () => {
     }
   };
 
-  const saveFontSizeInCookie = (cookieName, data) => {
-    const cookieFontSize = `${cookieName}=${JSON.stringify(
-      data
+  const saveDataInCookie = (propertyName, value) => {
+    const cookieValue = `${propertyName}=${JSON.stringify(
+      value
     )};path=/;expires=${new Date(Date.now() + 31536000000).toUTCString()}`;
-    document.cookie = cookieFontSize;
+    document.cookie = cookieValue;
   };
 
   const fetchStationsFromCookie = () => {
@@ -197,19 +214,12 @@ const App = () => {
     }
   };
 
-  const saveStationsInCookie = (cookieName, data) => {
-    const cookieString = `${cookieName}=${JSON.stringify(
-      data
-    )};path=/;expires=${new Date(Date.now() + 31536000000).toUTCString()}`;
-    document.cookie = cookieString;
-  };
-
   const onStationSelect = (dataSet) => {
     const selectedStationsCopy = [...selectedStations];
     selectedStationsCopy.push(dataSet);
     setSelectedStations(selectedStationsCopy);
 
-    saveStationsInCookie("bvgDepatureSelectedStations", selectedStationsCopy);
+    saveDataInCookie("bvgDepatureSelectedStations", selectedStationsCopy);
   };
 
   const onStationEdit = (dataSet) => {
@@ -220,7 +230,7 @@ const App = () => {
     selectedStationsCopy[index] = dataSet;
     setSelectedStations(selectedStationsCopy);
 
-    saveStationsInCookie("bvgDepatureSelectedStations", selectedStationsCopy);
+    saveDataInCookie("bvgDepatureSelectedStations", selectedStationsCopy);
   };
 
   const removeStation = (station) => {
@@ -229,10 +239,7 @@ const App = () => {
     );
     setSelectedStations(updatedSelectedStations);
 
-    saveStationsInCookie(
-      "bvgDepatureSelectedStations",
-      updatedSelectedStations
-    );
+    saveDataInCookie("bvgDepatureSelectedStations", updatedSelectedStations);
   };
 
   const copyExportUrlToClipboard = () => {
@@ -493,9 +500,6 @@ const App = () => {
             }}
           />
         </Popover>
-        {/* {
-          "Due to excessive downtime, I switched from Deutsche Bahn API to BVG API. Until they fix their issues, only Berlin and Brandenburg is available."
-        } */}
         {apiIsAvailable
           ? ""
           : "Es scheint aktuell ein Problem mit der Datenschnittstelle zu geben, weshalb die Website nicht wie gewohnt funktioniert. Wir müssen uns leider gedulden."}
@@ -534,76 +538,34 @@ const App = () => {
       >
         <div>
           <Popover
+            title="Schriftgröße Anzeigetafel"
             trigger="click"
             content={
               <div
                 style={{
-                  display: "grid",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "flex",
+                  justifyContent: "space-evenly",
                 }}
               >
-                <div>
-
-                  <div>Schriftgröße Anzeigetafel</div>
-                  <div>
-                    <div style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "10px",
-                      marginTop: "10px"
-                    }}>
-                      <Button
-                        onClick={() => {
-                          setFontSize((prev) => prev + 2);
-                          saveFontSizeInCookie("fontSize", fontSize + 2);
-                          buildUrlOutOfSelectedStations(selectedStations);
-                        }}
-                        icon={<PlusOutlined />}
-                      />
-
-                      <Button
-                        onClick={() => {
-                          setFontSize((prev) => prev - 2);
-                          saveFontSizeInCookie("fontSize", fontSize - 2);
-                          buildUrlOutOfSelectedStations(selectedStations);
-                        }}
-                        icon={<MinusOutlined />}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-
-
-                <div style={{
-                  marginTop: "10px"
-                }}>
-                  <div>Sichtbarkeit der Bemerkungen</div>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-
+                <Button
+                  onClick={() => {
+                    setFontSize((prev) => prev + 2);
+                    saveDataInCookie("fontSize", fontSize + 2);
+                    buildUrlOutOfSelectedStations(selectedStations);
                   }}
-                  >
-                    <Button
-                      style={{
-                        marginTop: "10px"
-                      }}
-                      onClick={() => {
-                        setRemarksVisibility((prev) => !prev);
-                        saveFontSizeInCookie("remarksVisibility", remarksVisibility);
-                        buildUrlOutOfSelectedStations(selectedStations);
-                      }}
-                    > change </Button>
+                  icon={<PlusOutlined />}
+                />
 
-                  </div>
-                </div>
+                <Button
+                  onClick={() => {
+                    setFontSize((prev) => prev - 2);
+                    saveDataInCookie("fontSize", fontSize - 2);
+                    buildUrlOutOfSelectedStations(selectedStations);
+                  }}
+                  icon={<MinusOutlined />}
+                />
               </div>
             }
-
           >
             <FontSizeOutlined
               style={{
@@ -697,9 +659,11 @@ const App = () => {
           onStationSelect={onStationSelect}
           onStationEdit={onStationEdit}
           removeStation={removeStation}
+          remarksVisibility={remarksVisibility}
+          onRemarksVisibilityChange={onRemarksVisibilityChange}
         />
       )}
-      {<DonationDisplay fontSize={fontSize} />}
+      <DonationDisplay fontSize={fontSize} />
     </div>
   );
 };

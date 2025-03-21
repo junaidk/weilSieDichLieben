@@ -20,10 +20,9 @@ const DonationDisplay = (props) => {
   return (
     <div style={{ padding: "16px" }}>
       <Marquee
-        speed={"40"}
         style={{
-          color: "white",
-          fontSize: FONTSIZE*0.6,
+          color: "orange",
+          fontSize: FONTSIZE,
           fontFamily: FONTFAMILYNAME,
         }}
       >

@@ -115,8 +115,8 @@ const DepartureTable = (props) => {
               <Marquee
                 speed={"30"}
                 style={{
-                  color: "gray",
-                  fontSize: FONTSIZE*0.8,
+                  color: "orange",
+                  fontSize: FONTSIZE * 0.8,
                   fontFamily: FONTFAMILYNAME,
                 }}
               >
