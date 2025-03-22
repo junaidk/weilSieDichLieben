@@ -36,7 +36,7 @@ const App = () => {
   );
   const [apiIsAvailable, setApiIsAvailable] = useState(false);
   const [exportUrl, setExportUrl] = useState("");
-  const [fontSize, setFontSize] = useState(20);
+  const [fontSize, setFontSize] = useState(16);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [remarksVisibility, setRemarksVisibility] = useState(true);
 
